@@ -280,12 +280,11 @@ const gamePlay = function() {
             return true;
         }
         showCardSymbol(event);
-        addMoves();
-
         addOpenCardlist(event);
 
 
         if (openCards.length > 1) {
+            addMoves();
             if (openCards[1].value == openCards[0].value) {
                 cardsMatch();
                 //console.log(match);
