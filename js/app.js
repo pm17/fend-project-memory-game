@@ -12,6 +12,11 @@ let cards = ['diamond', 'diamond', 'paper-plane-o', 'paper-plane-o', 'anchor', '
  */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
+/*
+@description for shuffling cards
+@param {array} 
+@returns {array} shuffled cards
+*/
 function shuffle(array) {
     var currentIndex = array.length,
         temporaryValue, randomIndex;
@@ -28,26 +33,35 @@ function shuffle(array) {
 }
 
 //variables
-
-
-let carddeck = document.querySelector('.deck');
+//cardDeck for holding all the cards
+let cardDeck = document.querySelector('.deck');
+//fragment to add the elements to virtual DOM
 let fragment = document.createDocumentFragment();
-let movescount = document.querySelector('.moves');
-let starslist = document.querySelectorAll('.stars li');
+//selecting the element to show the number of moves
+let movesCount = document.querySelector('.moves');
+
+//let starsList = document.querySelectorAll('.stars li');
+
+//to show the time
 let timer = document.querySelector('.timer');
+
 
 let moves = 0,
     match = 0,
-    opencards = [];
+    openCards = [];
 
-const gameinit = function() {
+
+/*
+@description for restting variable and initiating the game (shuffling and click)
+*/
+const gameInit = function() {
 
     moves = 0, match = 0;
-    opencards = [];
+    openCards = [];
     //shuffle the cards
     cards = shuffle(cards);
     //empty the deck
-    carddeck.innerHTML = " ";
+    cardDeck.innerHTML = " ";
 
     //add the cards to the the virtual DOM
     cards.forEach(function(e) {
@@ -58,22 +72,22 @@ const gameinit = function() {
     });
 
     //add the fragment to the deck
-    carddeck.appendChild(fragment);
+    cardDeck.appendChild(fragment);
 
     moves = 0;
-    movescount.innerHTML = moves;
+    movesCount.innerHTML = moves;
 
-    
+
     //timer
     second = 0;
     minute = 0;
     hour = 0;
-   
+
     timer.innerHTML = "0:0:0";
     // clearInterval(timeNow);
 
 
-    gameplay();
+    gamePlay();
 
 }
 
@@ -87,28 +101,31 @@ const gameinit = function() {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-
-//function to display card's symbol
-function show_card_symbol(event) {
-    //console.log("show_card_symbol");
+/*
+@description function to display card's symbol
+*/
+function showCardSymbol(event) {
+    //console.log("showCardSymbol");
     event.target.classList.add("show", "open");
 
 }
-//add card content to the list of open cards
 
-
-function add_open_cardlist(event) {
-   // console.log("add_open_cardlist");
-    let clicked_card_content = event.target.firstElementChild.classList;
-    //console.log(clicked_card_content);
-    opencards.push(clicked_card_content);
-    return clicked_card_content;
-
+/*
+@description add card content to the list of open cards
+@param {object} a element from the page
+*/
+function addOpenCardlist(event) {
+    // console.log("addOpenCardlist");
+   // console.log(typeof(event));
+    let clickedCardContent = event.target.firstElementChild.classList;
+    //console.log(clickedCardContent);
+    openCards.push(clickedCardContent);
 }
-
-//check whether the cards are opencards array match
-function cards_match() {
-    //console.log("check_card_match");
+/*
+@description check whether the cards of opencards array match
+*/
+function cardsMatch() {
+    //console.log("checkCardMatch");
     open = document.querySelectorAll('.open');
     open.forEach(function(e) {
         e.classList.add("match");
@@ -117,9 +134,11 @@ function cards_match() {
     return true;
 
 }
-//if cards do not match 
-function cards_not_match() {
-   // console.log("cards_not_match");
+/*
+@description if cards do not match close the cards
+*/
+function cardsNotMatch() {
+    // console.log("cardsNotMatch");
     open = document.querySelectorAll('.open');
     setTimeout(function() {
         open.forEach(function(e) {
@@ -127,10 +146,11 @@ function cards_not_match() {
         })
     }, 450);
 }
-
-//count the number of moves
-function addmoves() {
-   // console.log("addmoves");
+/*
+@description count the number of moves
+*/
+function addMoves() {
+    // console.log("addmoves");
     moves++;
     document.querySelector('.moves').innerHTML = moves;
     if (moves == 1) {
@@ -140,14 +160,18 @@ function addmoves() {
         initTime();
     }
 }
-//if all the cards match then end this game
+/*
+@description if all the cards match then end this game
+*/
 function endgame() {
     //console.log("endgame");
     clearInterval(timeNow);
     // console.log(timer.innerHTML);
     popup();
 }
-//timer setup
+/*
+@description game timer setup
+*/
 function initTime() {
     timeNow = setInterval(function() {
         second++;
@@ -163,6 +187,7 @@ function initTime() {
         }
     }, 1000)
 }
+
 //rating system
 //rating control system
 star0 = 0
@@ -170,9 +195,10 @@ star1 = 7
 star2 = 10
 
 
-//function to calculate the rating of the player
 let stars = document.querySelector('.stars');
-
+/*
+@description  function to calculate the rating of the player
+*/
 let rating = function(moves) {
     if (moves >= star0 && moves <= star1) {
 
@@ -189,13 +215,14 @@ let rating = function(moves) {
 
 }
 
-//pop-up upon winning the game
 var modal = document.getElementById('myModal');
 var score = document.querySelector('.score');
-
+/*
+@description pop-up upon winning the game
+*/
 function popup() {
     setTimeout(function() {
-        var modalrating = document.querySelector('.stars').cloneNode(true);
+        var modalRating = document.querySelector('.stars').cloneNode(true);
         document.querySelector('.star-rating').innerHTML = " "
 
         // Get the <span> element that closes the modal
@@ -207,7 +234,7 @@ function popup() {
 
         score.innerHTML = "No of Moves: " + moves;
 
-        document.querySelector('.star-rating').appendChild(modalrating);
+        document.querySelector('.star-rating').appendChild(modalRating);
         //console.log(document.querySelector('.star-rating').innerHTML);
 
 
@@ -226,47 +253,50 @@ function popup() {
 
     }, 800)
 }
-//function to reset the game
+/*
+@description function to reset the game
+*/
 reset = document.querySelector('.restart');
-reset.addEventListener('click', function(){
+reset.addEventListener('click', function() {
     clearInterval(timeNow);
-    resetstars = document.querySelectorAll('.fa-star-o');
-    resetstars.forEach(function(e) {
+    resetStars = document.querySelectorAll('.fa-star-o');
+    resetStars.forEach(function(e) {
         e.classList.remove("fa-star-o");
         e.classList.add("fa-star");
     })
 
 
-    gameinit();
+    gameInit();
 
 })
+/*
+@description all the function calls for the main game handling
+*/
 
-
-//all the function calls for hte main game handling
-const gameplay = function() {
-    carddeck.addEventListener('click', function(event) {
+const gamePlay = function() {
+    cardDeck.addEventListener('click', function(event) {
         //disable click on open card and on the deck
         if ((event.target.classList.contains("show", "match")) || (event.target.firstElementChild.classList.value == "card")) {
             return true;
         }
-        show_card_symbol(event);
-        addmoves();
+        showCardSymbol(event);
+        addMoves();
 
-        add_open_cardlist(event);
+        addOpenCardlist(event);
 
 
-        if (opencards.length > 1) {
-            if (opencards[1].value == opencards[0].value) {
-                cards_match();
-                console.log(match);
+        if (openCards.length > 1) {
+            if (openCards[1].value == openCards[0].value) {
+                cardsMatch();
+                //console.log(match);
                 match++;
             } else {
-                cards_not_match();
+                cardsNotMatch();
 
             }
 
             //empty opencards for new match
-            opencards = [];
+            openCards = [];
 
             //adjust rating
             rating(moves);
@@ -278,18 +308,20 @@ const gameplay = function() {
 
     });
 }
-
-function playAgain(){
+/*
+@description Function to click on the modal for playagain 
+*/
+function playAgain() {
 
     clearInterval(timeNow);
-    resetstars = document.querySelectorAll('.fa-star-o');
-    resetstars.forEach(function(e) {
+    resetStars = document.querySelectorAll('.fa-star-o');
+    resetStars.forEach(function(e) {
         e.classList.remove("fa-star-o");
         e.classList.add("fa-star");
     })
     document.getElementById('myModal').style.display = "none";
-    
-    gameinit();
+
+    gameInit();
 
 }
-gameinit();
+gameInit();
