@@ -223,6 +223,7 @@ var score = document.querySelector('.score');
 function popup() {
     setTimeout(function() {
         var modalRating = document.querySelector('.stars').cloneNode(true);
+        var modalTimer = document.querySelector('.timer').cloneNode(true);
         document.querySelector('.star-rating').innerHTML = " "
 
         // Get the <span> element that closes the modal
@@ -235,6 +236,7 @@ function popup() {
         score.innerHTML = "No of Moves: " + moves;
 
         document.querySelector('.star-rating').appendChild(modalRating);
+        document.querySelector('.star-rating').appendChild(modalTimer);
         //console.log(document.querySelector('.star-rating').innerHTML);
 
 
@@ -270,7 +272,7 @@ reset.addEventListener('click', function() {
 
 })
 /*
-@description all the function calls for the main game handling
+@description all the functimertion calls for the main game handling
 */
 
 const gamePlay = function() {
@@ -281,10 +283,10 @@ const gamePlay = function() {
         }
         showCardSymbol(event);
         addOpenCardlist(event);
-
+        addMoves();
 
         if (openCards.length > 1) {
-            addMoves();
+            
             if (openCards[1].value == openCards[0].value) {
                 cardsMatch();
                 //console.log(match);
